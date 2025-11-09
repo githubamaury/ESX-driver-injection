@@ -37,8 +37,21 @@ if (-not (Get-Module -ListAvailable -Name VMware.PowerCLI)) {
 
 # Step 3: Prompt user for input
 $EsxiDepotPath = Read-Host "Enter full path to ESXi Offline Bundle ZIP"
-$DriverDepotPath = Read-Host "Enter full path to community driver ZIP or VIB"
-$DriverPackageName = Read-Host "Enter exact name of driver package (e.g., net-community for NICs)"
+
+# Initialize arrays
+$DriverDepotPaths = @()
+$DriverPackageNames = @()
+
+do {
+    $DriverDepotPath = Read-Host "Enter full path to community driver ZIP or VIB"
+    $DriverPackageName = Read-Host "Enter exact name of driver package (e.g., net-community for NICs)"
+
+    $DriverDepotPaths += $DriverDepotPath
+    $DriverPackageNames += $DriverPackageName
+
+    $AddAnother = Read-Host "Do you want to add another driver? (yes/no)"
+} while ($AddAnother -eq "yes")
+
 $OutputIsoPath = Read-Host "Enter output path for customized ISO (or press Enter for C drive root directory)"
 if (-not $OutputIsoPath) {
     $OutputIsoPath = "C:\Custom-ESXi.iso"
